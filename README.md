@@ -16,7 +16,8 @@ This has been tested on Ubuntu 14.04.02 LTS using an Atheros 9k.
 * Download and install [Ubuntu 14.04 LTS](http://www.ubuntu.com/download/desktop)
 * install package "apt-get install build-essential" 
 * Set up [MPTCP](http://multipath-tcp.org/pmwiki.php/Users/HowToInstallMPTCP?) and reboot
-** postpone routing section till after you have the virtual wireless interface, see below routing section
+  * binaries are offered for Ubuntu 64bit, and for Debian 32bit and 64bit
+  * postpone routing section till after you have the virtual wireless interface, see below routing section
 * clone driver updates and scripts 
 ```
 sudo bash 

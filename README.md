@@ -66,7 +66,7 @@ The scripts provided in the 'Automatic Configuration' section (mptcp_up and mptc
 #### Replace wpa_supplicant ####
 ```
 mv /sbin/wpa_supplicant /sbin/wpa_supplicant.orig
-cd /sbin && wget http://????/wpa_supplicant  
+cd /sbin && wget https://github.com/dragos-niculescu/ietf2015/raw/master/wpa_supplicant
 ```
  
 #### Restart network manager ####

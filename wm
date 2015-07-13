@@ -1,0 +1,205 @@
+#!/bin/bash
+
+# Note: this is for kernel version 3.16.0-33-generic
+# This will be the "main branch" used for testing purposes.
+bold=$(tput bold)
+normal=$(tput sgr0)
+COUNT=1
+
+function print_usage {
+	echo ""
+	echo "Usage: $0 [action] <optional>"
+	echo ""
+	echo "Actions: "
+	echo "help <optional> - prints this prompt or options-related help"
+	echo "build <optional> - builds all <or one> modules"
+	echo "clean <optional> - clean up all <or one> modules"
+	echo "load - load custom modules"
+	echo "unload - unload existing modules"
+	echo "vifs [interface] [number] - set up virtual interfaces"
+	echo "unsetup [arg] - clean up prerequisites"
+	echo "average [filename] - downlink/uplink averages"
+	echo ""
+	exit
+}
+
+function print_helper {
+	if [ $# -eq 0 ]; then
+		print_usage
+		exit
+	fi
+	case "$1" in
+	"build")
+		echo ""
+		echo "Options:"
+		echo ""
+		echo "cfg - builds cfg80211"
+		echo "mac - builds mac80211"
+		echo ""
+		;;
+	"clean")
+		echo ""
+		echo "Options:"
+		echo ""
+		echo "cfg - cleans cfg80211"
+		echo "mac - cleans mac80211"
+		echo ""
+		;;
+	"load")
+		echo ""
+		echo "load: No further options."
+		echo ""
+		;;
+	"unload")
+		echo ""
+		echo "unload: No further options."
+		echo ""
+		;;
+	"vifs")
+		echo ""
+		echo "Options:"
+		echo ""
+		echo "vifs add/remove [interface] [num] - set up virtual interfaces, having ${bold}interface${normal} as a base"
+		echo ""
+		;;
+	"unsetup")
+		echo ""
+		echo "Options:"
+		echo ""
+		echo "mon [interface] - delete monitor interface"
+		echo "vifs [interface] - delete virtual interfaces"
+		echo ""
+		;;
+	"average")
+		echo ""
+		echo "average - compute column-average of ifstat output"
+		echo ""
+		;;
+	*)
+		echo ""
+		echo "Invalid action"
+		echo ""
+		;;
+	esac
+}
+
+function builder {
+	make -C /lib/modules/$(uname -r)/build M=$(pwd)/"$1" "$2"
+}
+
+function vif_add {
+    if [ $# -gt 4 ]; then
+	print_helper "vifs"
+	exit 1
+    fi
+    IFNAME=$1
+    VIF=v$2_$1
+    echo "Adding virtual interface $VIF"
+    iw dev $IFNAME interface add $VIF type station
+    echo $VIF >> added_vifs
+    
+    echo "Setting MAC"
+    # This increments the 5th byte of the MAC address for the vif
+    OLD_MAC=`ip link sh $IFNAME | egrep ether`
+    
+    # echo "$2 MAC addr: $OLD_MAC"
+    
+    OLD_MAC=`echo $OLD_MAC | tr ':' ' '`
+    mac1=`echo -n $OLD_MAC | awk '{print $2}' | tr ' ' ':'`
+    #mac1=`echo -n $OLD_MAC | awk '{print "0x"$2}' | while read b; do printf "%x" $((b+$2)); done`
+    mac2=`echo -n $OLD_MAC | awk '{print "0x"$3}' | while read b; do printf "%x" $((b+$2)); done`
+    mac3=`echo -n $OLD_MAC | awk '{print "0x"$4}' | while read b; do printf "%x" $((b+$2)); done`
+    mac4=`echo -n $OLD_MAC | awk '{print "0x"$5}' | while read b; do printf "%x" $((b+$2)); done`
+    mac5=`echo -n $OLD_MAC | awk '{print "0x"$6}' | while read b; do printf "%x" $((b+$2)); done`
+    mac6=`echo -n $OLD_MAC | awk '{print "0x"$7}' | while read b; do printf "%x" $((b+$2)); done`
+    #mac6=`echo -n $OLD_MAC | awk '{print $7}' `
+    
+    echo "$VIF MAC addr: $mac1:$mac2:$mac3:$mac4:$mac5:$mac6"
+    ifconfig $VIF hw ether "$mac1:$mac2:$mac3:$mac4:$mac5:$mac6"
+    
+    # echo "Setting virtual interface up"
+    # ip link set $2 up
+    
+    echo "Done"
+}
+
+function vif_remove {
+    echo "Deleting $1"
+    iw dev $1 del
+}
+
+function vif_remove_all {
+    if [ ! -f added_vifs ]; then
+	exit 0
+    fi
+
+    while read vif; do
+	vif_remove $vif
+    done <added_vifs
+    rm added_vifs
+}
+
+if [ $# -eq 0 ] || [ $# -gt 4 ]; then
+	echo ""
+	echo "Invalid number of parameters!"
+	print_usage
+fi
+
+case "$1" in
+"help")
+	print_helper $2
+	;;
+"build")
+	if [ $# -eq 1 ]; then
+		builder "wireless" "modules"
+		builder "mac80211" "modules"
+	else
+		builder $2 "modules"
+	fi
+	;;
+"clean")
+	if [ $# -eq 1 ]; then
+		cd `readlink wireless`
+		./clean.sh
+		cd -
+		builder "mac80211" "clean"
+	else
+		builder $2 "clean"
+	fi
+	;;
+"load")
+	modprobe -r ath9k
+	insmod $(pwd)/wireless/cfg80211.ko
+	insmod $(pwd)/mac80211/mac80211.ko
+	modprobe ath9k
+	;;
+"unload")
+	rmmod ath9k
+	rmmod ath9k_common
+	rmmod ath9k_hw
+	rmmod ath
+	rmmod mac80211
+	rmmod cfg80211
+	;;
+"vifs")
+	case $2 in
+	"add")
+		vif_add $3 $4
+		;;
+	"remove")
+		vif_remove $3
+		;;
+	"clean")
+		vif_remove_all
+		;;
+	*)
+		;;
+	esac
+;;
+*)
+	echo ""
+	echo "Invalid option."
+	echo ""
+	print_usage
+	;;
+esac

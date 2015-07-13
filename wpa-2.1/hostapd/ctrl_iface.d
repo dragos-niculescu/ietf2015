@@ -1,0 +1,32 @@
+ctrl_iface.o: ctrl_iface.c /home/dniculescu/wpa-2.1/src/utils/includes.h \
+ /home/dniculescu/wpa-2.1/src/utils/build_config.h \
+ /home/dniculescu/wpa-2.1/src/utils/common.h \
+ /home/dniculescu/wpa-2.1/src/utils/os.h \
+ /home/dniculescu/wpa-2.1/src/utils/wpa_debug.h \
+ /home/dniculescu/wpa-2.1/src/utils/wpabuf.h \
+ /home/dniculescu/wpa-2.1/src/utils/eloop.h \
+ /home/dniculescu/wpa-2.1/src/common/version.h \
+ /home/dniculescu/wpa-2.1/src/common/ieee802_11_defs.h \
+ /home/dniculescu/wpa-2.1/src/drivers/driver.h \
+ /home/dniculescu/wpa-2.1/src/common/defs.h \
+ /home/dniculescu/wpa-2.1/src/utils/list.h \
+ /home/dniculescu/wpa-2.1/src/radius/radius_client.h \
+ /home/dniculescu/wpa-2.1/src/utils/ip_addr.h \
+ /home/dniculescu/wpa-2.1/src/radius/radius_server.h \
+ /home/dniculescu/wpa-2.1/src/ap/hostapd.h \
+ /home/dniculescu/wpa-2.1/src/ap/ap_config.h \
+ /home/dniculescu/wpa-2.1/src/common/wpa_common.h \
+ /home/dniculescu/wpa-2.1/src/common/ieee802_11_common.h \
+ /home/dniculescu/wpa-2.1/src/wps/wps.h \
+ /home/dniculescu/wpa-2.1/src/wps/wps_defs.h \
+ /home/dniculescu/wpa-2.1/src/ap/ap_config.h \
+ /home/dniculescu/wpa-2.1/src/ap/ieee802_1x.h \
+ /home/dniculescu/wpa-2.1/src/ap/wpa_auth.h \
+ /home/dniculescu/wpa-2.1/src/common/eapol_common.h \
+ /home/dniculescu/wpa-2.1/src/ap/ieee802_11.h \
+ /home/dniculescu/wpa-2.1/src/ap/sta_info.h \
+ /home/dniculescu/wpa-2.1/src/ap/wps_hostapd.h \
+ /home/dniculescu/wpa-2.1/src/ap/ctrl_iface_ap.h \
+ /home/dniculescu/wpa-2.1/src/ap/ap_drv_ops.h \
+ /home/dniculescu/wpa-2.1/src/ap/wnm_ap.h \
+ /home/dniculescu/wpa-2.1/src/wps/wps_defs.h config_file.h ctrl_iface.h

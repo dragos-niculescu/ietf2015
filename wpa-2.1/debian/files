@@ -1,0 +1,4 @@
+hostapd_2.1-0ubuntu1.3_amd64.deb net optional
+wpagui_2.1-0ubuntu1.3_amd64.deb net optional
+wpasupplicant_2.1-0ubuntu1.3_amd64.deb net optional
+wpasupplicant-udeb_2.1-0ubuntu1.3_amd64.udeb debian-installer standard

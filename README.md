@@ -14,7 +14,14 @@ This is a mac80211 patch which can be used to eliminate the handoff process in 8
 This has been tested on Ubuntu 14.04.02 LTS using an Atheros 9k.
 
 * Download and install [Ubuntu 14.04 LTS](http://www.ubuntu.com/download/desktop)
+* install package "apt-get install build-essential" 
 * Set up [MPTCP](http://multipath-tcp.org/pmwiki.php/Users/HowToInstallMPTCP?) and reboot
+** postpone routing section till after you have the virtual wireless interface, see below routing section
+* clone driver updates and scripts 
+```
+git clone https://github.com/dragos-niculescu/ietf2015.git 
+```  
+
 
 ### Setting up ###
 
@@ -43,7 +50,16 @@ Will add `v1_wlan0` to the list of interfaces.
 
 Each new virtual interface will be used to associate to a different SSID. NetworkManager will automatically bring it up and attempt to associate.
 
-##### Notable caveat #####
+
+
+#### Replace wpa_supplicant ####
+```
+pkill wpa_supplicant
+mv /sbin/wpa_supplicant /sbin/wpa_supplicant.orig
+cd /sbin && wget https://github.com/dragos-niculescu/ietf2015/raw/master/wpa_supplicant
+```
+
+##### Notice #####
 
 By using **wm** to add virtual interfaces, a new MAC address is given, derived from the base interface MAC address. 
 
@@ -55,19 +71,6 @@ service network-manager start
  
 You can then add vifs and set new MACs and then restart network-manager. It will take over the new MAC and will not change it.
 
-#### Set up routing ####
-
-After testing connectivity through each interface and access point, set up [MPTCP routing](http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting).
-
-The scripts provided in the 'Automatic Configuration' section (mptcp_up and mptcp_down) seem to work fine in Ubuntu Trusty and Mint 17. 
-
-
-
-#### Replace wpa_supplicant ####
-```
-mv /sbin/wpa_supplicant /sbin/wpa_supplicant.orig
-cd /sbin && wget https://github.com/dragos-niculescu/ietf2015/raw/master/wpa_supplicant
-```
  
 #### Restart network manager ####
 
@@ -76,6 +79,14 @@ service network-manager start
 ```
 
 Associate to various networks on both cards so that passwords are not required later at handoffs. 
+
+
+#### Set up routing ####
+
+After testing connectivity through each interface and access point, set up [MPTCP routing](http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting).
+
+The scripts provided in the 'Automatic Configuration' section (mptcp_up and mptcp_down) seem to work fine in Ubuntu Trusty and Mint 17. 
+
 
 #### verify proper MPTCP connectivity 
 

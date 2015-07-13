@@ -20,25 +20,22 @@ This has been tested on Ubuntu 14.04.02 LTS using an Atheros 9k.
 
 #### Building ####
 
-Turning off wireless from the GUI.
+* Turning off wireless from the GUI.
+* Unload wireless drivers and build new 802.11 module
 
 ```
-#!bash
 service network-manager stop 
 sudo ./wm build && ./wm unload 
- 
 ```
 #### Adding virtual interfaces ####
 
 ```
-#!bash
 ./wm vifs add <wireless_interface_name> <index>
 ```
 
 Vif names will typically be of the form `v#_wlan%`. For example:
 
 ```
-#!bash
 ./wm vifs add wlan0 1
 ```
 
@@ -52,7 +49,6 @@ By using **wm** to add virtual interfaces, a new MAC address is given, derived f
 
 
 ```
-#!bash
 ./wm load
 service network-manager start
 ```
@@ -69,7 +65,6 @@ The scripts provided in the 'Automatic Configuration' section (mptcp_up and mptc
 
 #### Replace wpa_supplicant ####
 ```
-#!bash
 mv /sbin/wpa_supplicant /sbin/wpa_supplicant.orig
 cd /sbin && wget http://????/wpa_supplicant  
 ```
@@ -77,7 +72,6 @@ cd /sbin && wget http://????/wpa_supplicant
 #### Restart network manager ####
 
 ```
-#!bash
 service network-manager start
 ```
 
@@ -86,7 +80,6 @@ Associate to various networks on both cards so that passwords are not required l
 #### verify proper MPTCP connectivity 
 
 ```
-#!bash 
 ip ro # shows routes across each virtual interface 
 # should answer something like:
 # subnet0 dev wlan0 ... src IP0
@@ -97,18 +90,19 @@ ip ru sh # shows outgoing rules across IP0 and IP1
 #verify outside IPs across both networks
 curl --interface IP0 http://141.85.37.151/static/ietf/whatip.php
 curl --interface IP1 http://141.85.37.151/static/ietf/whatip.php
- 
 ``` 
 
 #### install measurement script 
 
 This shell script periodically downloads a small file across each interface with regular TCP, and then across both interfaces with MPTCP. 
 ```
-#!bash 
 mv measurement_bw.sh /bin
-measurement_bw.sh crontab 
+```
 
-#recommended entries to be added to crontab to automate downloading and reporting
+* entries to be added to crontab to automate downloading and reporting
+```
+measurement_bw.sh crontab 
+#recommended entries
 WLAN0=wlan0
 WLAN1=v1_wlan0
 0,10,20,30,40,50  * * * * measure_bw.sh start_short $WLAN0   
@@ -119,10 +113,10 @@ WLAN1=v1_wlan0
 7,17,27,37,47,57 * * * * measure_bw.sh stop; measure_bw.sh start_long multi   
 9,19,29,39,49,59 * * * * measure_bw.sh stop; measure_bw.sh upload 
 ```
+make sure WLAN0 and WLAN1 reflect actual wireless interfaces
 
 #### revert laptop to original state 
 ```
-#!bash 
 crontab -e 
 # and in editor remove all measurement entries
 
@@ -135,8 +129,9 @@ apt-get remove linux-mptcp
 #remove mptcp startup scripts 
 rm /etc/network/if-up.d/mpctp_up
 rm /etc/network/if-post-down.d/mpctp_down
+```
 
-# reboot
+* reboot
 
 ### Future updates ###
 

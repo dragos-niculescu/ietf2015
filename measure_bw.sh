@@ -59,19 +59,18 @@ WLAN1=v1_wlan0
 6,16,26,36,46,56 * * * * measure_bw.sh stop; measure_bw.sh start_short multi
 7,17,27,37,47,57 * * * * measure_bw.sh stop; measure_bw.sh start_long multi   
 9,19,29,39,49,59 * * * * measure_bw.sh stop; measure_bw.sh upload 
-
-#short=1min long=5min
-WLAN0=wlan0
-WLAN1=v1_wlan0
-0,20,40  * * * * measure_bw.sh start_short $WLAN0   
-1,21,41  * * * * measure_bw.sh stop; measure_bw.sh start_short $WLAN1   
-2,22,42  * * * * measure_bw.sh stop; measure_bw.sh start_long $WLAN0   
-7,27,47  * * * * measure_bw.sh stop; measure_bw.sh start_long $WLAN1   
-12,32,52 * * * * measure_bw.sh stop; measure_bw.sh start_short multi
-13,33,53 * * * * measure_bw.sh stop; measure_bw.sh start_long multi   
-18,38,58 * * * * measure_bw.sh stop; measure_bw.sh upload 
-
 '
+#short=1min long=5min
+# WLAN0=wlan0
+# WLAN1=v1_wlan0
+# 0,20,40  * * * * measure_bw.sh start_short $WLAN0   
+# 1,21,41  * * * * measure_bw.sh stop; measure_bw.sh start_short $WLAN1   
+# 2,22,42  * * * * measure_bw.sh stop; measure_bw.sh start_long $WLAN0   
+# 7,27,47  * * * * measure_bw.sh stop; measure_bw.sh start_long $WLAN1   
+# 12,32,52 * * * * measure_bw.sh stop; measure_bw.sh start_short multi
+# 13,33,53 * * * * measure_bw.sh stop; measure_bw.sh start_long multi   
+# 18,38,58 * * * * measure_bw.sh stop; measure_bw.sh upload 
+
 }
 
 upload()

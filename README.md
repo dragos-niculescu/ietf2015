@@ -14,9 +14,12 @@ This is a mac80211 patch which can be used to eliminate the handoff process in 8
 This has been tested on Ubuntu 14.04.02 LTS using an Atheros 9k.
 
 * Download and install [Ubuntu 14.04 LTS](http://www.ubuntu.com/download/desktop)
-* install package "apt-get install build-essential" 
+* install some needed packages 
+```
+apt-get install curl build-essential
+```
 * Set up [MPTCP](http://multipath-tcp.org/pmwiki.php/Users/HowToInstallMPTCP?) and reboot
-  * binaries are offered for Ubuntu 64bit, and for Debian 32bit and 64bit
+  * patch works for other Ubuntu versions (precise), but make sure you use trusty repos, so that kernel 3.14.0-89 is used
   * postpone routing section till after you have the virtual wireless interface, see below routing section
 * clone driver updates and scripts 
 ```
@@ -35,7 +38,8 @@ cd ietf2015
 
 ```
 service network-manager stop 
-./wm build && ./wm unload 
+./wm unload 
+./wm build
 ```
 #### Adding virtual interfaces ####
 
@@ -53,6 +57,10 @@ Will add `v1_wlan0` to the list of interfaces.
 
 Each new virtual interface will be used to associate to a different SSID. NetworkManager will automatically bring it up and attempt to associate.
 
+```
+ifconfig wlan0 up 
+ifconfig v1_wlan0 up 
+```
 
 ##### Load multichannel driver #####
 

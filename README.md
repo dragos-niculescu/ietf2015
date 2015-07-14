@@ -20,6 +20,7 @@ apt-get install curl build-essential git
 ```
 * Set up [MPTCP](http://multipath-tcp.org/pmwiki.php/Users/HowToInstallMPTCP?) 
   * patch works for other Ubuntu versions (precise), but make sure you use trusty repos, so that kernel 3.14.0-89 is used
+  * for 32bit, use wheezy (tested on Ubuntu 14.04 32bit, some problems with network-manager) 
   * ```wget -q -O - http://multipath-tcp.org/mptcp.gpg.key | sudo apt-key add - ```
   * ```echo 'deb http://multipath-tcp.org/repos/apt/debian trusty main' > /etc/apt/sources.list.d/mptcp.list```
   * ```apt-get update && apt-get install linux-mptcp ```
@@ -29,7 +30,7 @@ apt-get install curl build-essential git
   * reboot
 * clone driver updates and scripts :
 ```
-sudo bash 
+cd /root
 git clone https://github.com/dragos-niculescu/ietf2015.git 
 cd ietf2015
 ```  
@@ -43,6 +44,7 @@ cd ietf2015
 ```
 service network-manager stop 
 ./wm unload 
+#make sure mac80211 and cfg80211 are unloaded: they may be blocked by other drivers(iwlwifi,ath9k_htc) 
 ./wm build
 ```
 #### Adding virtual interfaces ####
@@ -107,12 +109,18 @@ ip ro # shows routes across each virtual interface
 # subnet0 dev wlan0 ... src IP0
 # subnet1 dev wlan1 ... src IP1
 
-ip ru sh # shows outgoing rules across IP0 and IP1
+ip ru sh 
+# shows outgoing rules across IP0 and IP1
+# ????: from IP0 lookup 1
+# ????: drom IP1 lookup 2
 
 #verify outside IPs across both networks
 curl --interface IP0 http://141.85.37.151/static/ietf/whatip.php
 curl --interface IP1 http://141.85.37.151/static/ietf/whatip.php
-``` 
+```
+If these are not working properly, MPTCP routes are not set up when bringing interfaces up, and 
+they may need to be set up statically, according to (http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting) 
+
 
 #### install measurement script 
 

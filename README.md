@@ -16,36 +16,30 @@ This has been tested on Ubuntu 14.04.02 LTS using an Atheros 9k.
 * Download and install [Ubuntu 14.04 LTS](http://www.ubuntu.com/download/desktop)
 * install some needed packages 
 ```
-apt-get install curl build-essential
+apt-get install curl build-essential git
 ```
-* Set up [MPTCP](http://multipath-tcp.org/pmwiki.php/Users/HowToInstallMPTCP?) and reboot
-```
-```
+* Set up [MPTCP](http://multipath-tcp.org/pmwiki.php/Users/HowToInstallMPTCP?) 
   * patch works for other Ubuntu versions (precise), but make sure you use trusty repos, so that kernel 3.14.0-89 is used
   * ```wget -q -O - http://multipath-tcp.org/mptcp.gpg.key | sudo apt-key add - ```
-  * ```echo 'deb http://multipath-tcp.org/repos/apt/debian trusty main' >> /etc/apt/sources.list.d/mptcp.list```
+  * ```echo 'deb http://multipath-tcp.org/repos/apt/debian trusty main' > /etc/apt/sources.list.d/mptcp.list```
   * ```apt-get update && apt-get install linux-mptcp ```
-  * postpone routing section till after you have the virtual wireless interface, see below routing section
-    * ```[mptcp_up](https://github.com/multipath-tcp/mptcp-scripts/raw/master/scripts/rt_table/mptcp_up) - Place it inside /etc/network/if-up.d/ and make it executable.```
-    * ```[mptcp_down](https://github.com/multipath-tcp/mptcp-scripts/raw/master/scripts/rt_table/mptcp_down) - Place it inside /etc/network/if-post-down.d/ and make it executable.```
-
+  * automatic routing 
+    * [mptcp_up](https://github.com/multipath-tcp/mptcp-scripts/raw/master/scripts/rt_table/mptcp_up) - Place it inside /etc/network/if-up.d/ and make it executable.
+    * [mptcp_down](https://github.com/multipath-tcp/mptcp-scripts/raw/master/scripts/rt_table/mptcp_down) - Place it inside /etc/network/if-post-down.d/ and make it executable.
   * reboot
-* clone driver updates and scripts 
-
+* clone driver updates and scripts :
 ```
 sudo bash 
 git clone https://github.com/dragos-niculescu/ietf2015.git 
 cd ietf2015
 ```  
 
-
 ### Setting up ###
 
 #### Building ####
 
 * Turning off wireless from the GUI.
-* Unload wireless drivers and build new 802.11 module
-
+* Unload wireless drivers and build new 802.11 module:
 ```
 service network-manager stop 
 ./wm unload 

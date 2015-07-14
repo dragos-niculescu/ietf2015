@@ -133,6 +133,12 @@ WLAN1=v1_wlan0
 ```
 make sure WLAN0 and WLAN1 reflect actual wireless interfaces
 
+#### data collection
+
+As can be gathered from the above crontab script, data collection means downloading 
+2MB chunks every 2 minutes across each interface and using MPTCP. Logs of these transfers
+are periodically updated to mobil4.org. Consult the script /sbin/measure_bw.sh for details. 
+
 
 #### revert laptop to original state 
 ```
@@ -146,8 +152,8 @@ mv /sbin/wpa_supplicant.orig /sbin/wpa_supplicant
 apt-get remove linux-mptcp 
  
 #remove mptcp startup scripts 
-rm /etc/network/if-up.d/mpctp_up
-rm /etc/network/if-post-down.d/mpctp_down
+rm /etc/network/if-up.d/mptcp_up
+rm /etc/network/if-post-down.d/mptcp_down
 ```
 
 * reboot

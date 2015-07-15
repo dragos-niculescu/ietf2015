@@ -39,15 +39,23 @@ cd ietf2015
 
 #### Building ####
 
-* Turning off wireless from the GUI.
+* Turn off wireless from the GUI.
+* Replace wpa_supplicant 
+```
+pkill wpa_supplicant
+mv /sbin/wpa_supplicant /sbin/wpa_supplicant.orig
+cp ./wpa_supplicant /sbin
+```
 * Unload wireless drivers and build new 802.11 module:
 ```
 service network-manager stop 
 ./wm unload 
 #make sure mac80211 and cfg80211 are unloaded: they may be blocked by other drivers(iwlwifi,ath9k_htc) 
 ./wm build
+./wm load
+#loaded multichannel driver 
 ```
-#### Adding virtual interfaces ####
+#### Adding virtual interfaces (vifs) ####
 
 ```
 ./wm vifs add <wireless_interface_name> <index>
@@ -62,26 +70,11 @@ Vif names will typically be of the form `v#_wlan%`. For example:
 Will add `v1_wlan0` to the list of interfaces.
 
 Each new virtual interface will be used to associate to a different SSID. NetworkManager will automatically bring it up and attempt to associate.
+By using **wm** to add virtual interfaces, a new MAC address is given, derived from the base interface MAC address. The new driver will timeshare between the two interfaces on their respective channels 
 
 ```
 ifconfig wlan0 up 
 ifconfig v1_wlan0 up 
-```
-
-##### Load multichannel driver #####
-
-By using **wm** to add virtual interfaces, a new MAC address is given, derived from the base interface MAC address. The new driver will timeshare between the two interfaces on their respective channels 
-
-
-```
-./wm load
-```
- 
-#### Replace wpa_supplicant ####
-```
-pkill wpa_supplicant
-mv /sbin/wpa_supplicant /sbin/wpa_supplicant.orig
-cp ./wpa_supplicant /sbin
 ```
 
  
@@ -118,8 +111,8 @@ ip ru sh
 curl --interface IP0 http://141.85.37.151/static/ietf/whatip.php
 curl --interface IP1 http://141.85.37.151/static/ietf/whatip.php
 ```
-If these are not working properly, MPTCP routes are not set up when bringing interfaces up, and 
-they may need to be set up statically, according to (http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting) 
+If these are not working as expected, MPTCP routes are not set up when bringing interfaces up, and they may need to be set up statically, according to 
+(http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting) 
 
 
 #### install measurement script 
@@ -148,8 +141,8 @@ make sure WLAN0 and WLAN1 reflect actual wireless interfaces
 #### data collection
 
 As can be gathered from the above crontab script, data collection means downloading 
-2MB chunks every 2 minutes across each interface and using MPTCP. Logs of these transfers
-are periodically updated to mobil4.org. Consult the script /sbin/measure_bw.sh for details. 
+2MB chunks every 2 minutes across each interface with legacy TCP, and using MPTCP. Logs of these transfers
+are periodically updated to http://mobil4.org. Consult the script /sbin/measure_bw.sh for details. 
 
 
 #### revert laptop to original state 
@@ -166,6 +159,7 @@ apt-get remove linux-mptcp
 #remove mptcp startup scripts 
 rm /etc/network/if-up.d/mptcp_up
 rm /etc/network/if-post-down.d/mptcp_down
+rm /bin/measure_bw.sh 
 ```
 
 * reboot

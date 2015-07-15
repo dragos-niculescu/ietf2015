@@ -492,6 +492,7 @@ static inline void reg_regdb_query(const char *alpha2) {}
  */
 static int call_crda(const char *alpha2)
 {
+	pr_info("cfg: multiwifi\n");
 	if (!is_world_regdom((char *) alpha2))
 		pr_info("Calling CRDA for country: %c%c\n",
 			alpha2[0], alpha2[1]);

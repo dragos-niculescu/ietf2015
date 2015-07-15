@@ -87,13 +87,6 @@ Both cards should be visible in the GUI, and you should be able to choose an ESS
 Associate to various networks on both cards so that passwords are not required later at handoffs. 
 
 
-#### Set up routing ####
-
-After testing connectivity through each interface and access point, set up [MPTCP routing](http://multipath-tcp.org/pmwiki.php/Users/ConfigureRouting).
-
-The scripts provided in the 'Automatic Configuration' section (mptcp_up and mptcp_down) seem to work fine in Ubuntu Trusty and Mint 17. 
-
-
 ### verify proper MPTCP connectivity 
 
 ```
@@ -140,9 +133,10 @@ make sure WLAN0 and WLAN1 reflect actual wireless interfaces
 
 #### data collection
 
-As can be gathered from the above crontab script, data collection means downloading 
+* As can be gathered from the above crontab script, data collection means downloading 
 2MB chunks every 2 minutes across each interface with legacy TCP, and using MPTCP. Logs of these transfers
 are periodically updated to http://mobil4.org. Consult the script /sbin/measure_bw.sh for details. 
+* keep laptop online and use normally
 
 
 #### revert laptop to original state 

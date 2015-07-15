@@ -112,7 +112,7 @@ If these are not working as expected, MPTCP routes are not set up when bringing 
 
 This shell script periodically downloads a small file across each interface with regular TCP, and then across both interfaces with MPTCP. 
 ```
-mv measurement_bw.sh /bin
+cp measurement_bw.sh /bin
 ```
 
 * entries to be added to crontab to automate downloading and reporting

@@ -77,7 +77,7 @@ upload()
 {
     ID=$(sudo dmidecode -t 4 | grep ID | sed 's/.*ID://;s/ //g') 
     ETH=$(/sbin/ifconfig -a | grep -oP 'Ether.*HWaddr \K.*' | head -n1 | tr -d '[\n :]' )
-    { echo "SUBMITFROM $ID $ETH $DATE"; date -d "@$DATE"; ifconfig -a; iwconfig; ip ro; ip ru sh; sysctl -a; dmesg; lsmod; } > /tmp/$ID-$ETH-$DATE
+    { echo "SUBMITFROM $ID $ETH $DATE"; hostname; date -d "@$DATE"; ifconfig -a; iwconfig; ip ro; ip ru sh; sysctl -a; dmesg; lsmod; } > /tmp/$ID-$ETH-$DATE
     echo "MEASUREBW $SHORT $LONG" >> /tmp/$ID-$ETH-$DATE
     cat $STATSFILE >> /tmp/$ID-$ETH-$DATE
     gzip /tmp/$ID-$ETH-$DATE

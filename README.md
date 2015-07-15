@@ -23,7 +23,7 @@ apt-get install curl build-essential git
   * for 32bit, use wheezy (tested on Ubuntu 14.04 32bit, some problems with network-manager) 
   * ```wget -q -O - http://multipath-tcp.org/mptcp.gpg.key | sudo apt-key add - ```
   * ```echo 'deb http://multipath-tcp.org/repos/apt/debian trusty main' > /etc/apt/sources.list.d/mptcp.list```
-  * ```apt-get update && apt-get install linux-mptcp ```
+  * ```apt-get update && apt-get dist-upgrade && apt-get install linux-mptcp ```
   * automatic routing 
     * [mptcp_up](https://github.com/multipath-tcp/mptcp-scripts/raw/master/scripts/rt_table/mptcp_up) - Place it inside /etc/network/if-up.d/ and make it executable.
     * [mptcp_down](https://github.com/multipath-tcp/mptcp-scripts/raw/master/scripts/rt_table/mptcp_down) - Place it inside /etc/network/if-post-down.d/ and make it executable.
